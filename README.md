@@ -1,14 +1,14 @@
 
-The project involves developing a graphical software application in C# language to create a bird habitat management system. The software should meet the following basic requirements:
+**The project involves developing a graphical software application in C# language to create a bird habitat management system.**
 
-System login screen with username and password authentication (saved in an Excel file), displaying appropriate error messages for incorrect details.
-New user registration with specific criteria for username and password, along with appropriate error messages for invalid inputs.
-Main screen with options including adding a new bird to the habitat, adding a new cage, searching for birds or cages based on different parameters, and viewing bird details.
-The ability to add chicks to birds, inheriting certain details from the parent bird.
-All data entered in the system should be saved in a file.
-Editing functionality for bird and cage details.
-Additional logical requirements can be implemented, although not mandatory.
-During the presentation, you will be required to answer questions related to software quality, Bohm's principle, Bermuda Triangle of tests, black and white box tests, different types of tests, test implementation strategy, advantages and disadvantages of functional tests, risk level calculation for bugs, field testing, and other related topics.
+The software should meet the following basic requirements:
+1.        System login screen with username and password authentication (saved in an Excel file), displaying appropriate error messages for incorrect details.
+2.        New user registration with specific criteria for username and password, along with appropriate error messages for invalid inputs.
+3.        Main screen with options including adding a new bird to the habitat, adding a new cage, searching for birds or cages based on different parameters, and viewing bird details.
+4.        The ability to add chicks to birds, inheriting certain details from the parent bird.
+5.        All data entered in the system should be saved in a file.
+6.        Editing functionality for bird and cage details.
+
 
 Login to the user in full Hebrew!
 ![Image](https://user-images.githubusercontent.com/117019431/253829392-298505f5-4cdf-4cca-89c4-aea500ad7192.jpg)
@@ -29,13 +29,12 @@ Go try!!!
  (If someone wants to connect to an online database, there is a simple option, contact me and help)
 
 
-
 Tasks to be completed for the project:
 
-Construct a Control Flow Graph (CFG) for two functions of approximately 10 lines each, including conditions or loops.
-Write three user stories based on the project's basic requirements.
-Present four test cases from two different user stories.
-Describe two functional tests and two GUI tests performed.
-Create a test scenario, two derived test cases, and appropriate test scripts.
-Design a boundary table including at least five variables or data fields for checking domains.
-Develop a decision table and a decision tree for an example code snippet with a minimum of two conditions.
+1.        There is a control flow graph (CFG) for two functions, for computer purposes of what can be done with a CFG.
+2.        There are three user stories based on the basic requirements of the project.
+3.        There are four test cases from two different user stories.
+4.        There are two functional tests and two GUI tests performed.
+5.        There is a test scenario, two derived test cases and corresponding test scripts.
+6.        Have a boundary table that includes at least five variables or data fields for domain checking.
+7.        There is a decision table and a decision tree for a sample code snippet with a minimum of two conditions.
