@@ -10,35 +10,50 @@ namespace TestF.Forms.MineForms
 {
     public partial class RegistrarFrom : Form
     {
-        // Constructor
+        //TODO: זה דף הרשמה + הוראות
+        /*
+         * !!!!!!!   המשתמשים חייבים להשמר בקובץ אקסל !!!!!!!
+         *  1.       שם משתמש - מכיל בין 6 ל 8 תווים. מתוך התווים, לכל היותר 2 *ספרות* וכל השאר אותיות,  האותיות חייבות להיות באנגלית  
+         *  
+         *  2.        סיסמה – בין 8 ל 10 תווים. מכיל לפחות אות אחת, סיפרה אחת ותו מיוחד אחד 
+         *    תוו מיוחד (!,#,$,....)
+         *    
+         *  3. מספר ת"ז חייב להיות רק ממספרים
+         *  
+         *  4. שגיאה באחד הפרטים צריכה להוביל להצגת הודעת שגיאה מתאימה
+         * 
+         */
+
+
+        //ctor
         public RegistrarFrom()
         {
             InitializeComponent();
+            // העלת הפנאל הרגיל
             this.Text = string.Empty;
             this.ControlBox = false;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
         }
 
-        // Import external functions from user32 DLL for capturing mouse movement and sending messages
+        // הזזת החלון דרך הפנאל
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
-
-        // Event handler for the panelTitleBar (title bar panel) mouse down event
         private void panelTitleBar_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        // Event handler for the exitBtu (exit button) click event
+
+        // שלושת כפתורי השליטה,סגור,הגדל,מזער
         private void exitBtu_Click(object sender, EventArgs e)
         {
             Application.Exit();
+
         }
 
-        // Event handler for the BtuMaxSize (maximize button) click event
         private void BtuMaxSize_Click(object sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Normal)
@@ -47,59 +62,63 @@ namespace TestF.Forms.MineForms
                 this.WindowState = FormWindowState.Normal;
         }
 
-        // Event handler for the BtuMiniSize (minimize button) click event
         private void BtuMiniSize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+
         }
 
-        // Event handler for the PasswordBox (password textbox) click event
+
+        // -------------------- user boxs--------------------------
+        //---------------------- events ---------------------------
+
+        //--- password ---
         private void PasswordBox_Click(object sender, EventArgs e)
         {
+            // תזכורת
+            //its not "Text" its "Texts"
             if (UserNameBox.Texts == "Password")
                 PasswordBox.Texts = String.Empty;
             PasswordBox.ForeColor = System.Drawing.SystemColors.Window;
-        }
 
-        // Event handler for the PasswordBox (password textbox) leave event
+        }
         private void PasswordBox_Leave(object sender, EventArgs e)
         {
+            // מצב עזיבה ללא כתיבת כלום
             if (PasswordBox.Texts == "")
             {
                 PasswordBox.Texts = "Password";
                 PasswordBox.ForeColor = System.Drawing.Color.DimGray;
             }
         }
-
-        // Event handler for the UserNameBox (username textbox) click event
+        //--- UserName ---
         private void UserNameBox_Click(object sender, EventArgs e)
         {
+            //TODO: its not "Text" its "Texts"
             if (UserNameBox.Texts == "username")
                 UserNameBox.Texts = String.Empty;
             UserNameBox.ForeColor = System.Drawing.SystemColors.Window;
         }
-
-        // Event handler for the UserNameBox (username textbox) leave event
         private void UserNameBox_Leave(object sender, EventArgs e)
         {
+            // מצב עזיבה ללא כתיבת כלום
             if (UserNameBox.Texts == "")
             {
                 UserNameBox.Texts = "username";
                 UserNameBox.ForeColor = System.Drawing.Color.DimGray;
             }
         }
-
-        // Event handler for the ID_Box (ID textbox) click event
+        //--- ID_box ---
         private void ID_Box_Click(object sender, EventArgs e)
         {
+            //TODO: its not "Text" its "Texts"
             if (ID_Box.Texts == "ID")
                 ID_Box.Texts = String.Empty;
             ID_Box.ForeColor = System.Drawing.SystemColors.Window;
         }
-
-        // Event handler for the ID_Box (ID textbox) leave event
         private void ID_Box_Leave(object sender, EventArgs e)
         {
+            // מצב עזיבה ללא כתיבת כלום
             if (ID_Box.Texts == "")
             {
                 ID_Box.Texts = "ID";
@@ -107,7 +126,7 @@ namespace TestF.Forms.MineForms
             }
         }
 
-        // Event handler for the GoBack button click event
+        //---------- כפתור חזרה אחורה---------------
         private void GoBack_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -116,21 +135,17 @@ namespace TestF.Forms.MineForms
             this.Close();
         }
 
-        // Event handler for the loginBtu (login button) click event
         private void loginBtu_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate the entered username, password, and ID
                 ArgumentTest.TestUserName(UserNameBox.Texts);
                 ArgumentTest.TestPassword(PasswordBox.Texts);
                 ArgumentTest.TestId(ID_Box.Texts);
 
-                // Register the user with the entered details
                 FileControl.RegisterUser(UserNameBox.Texts, PasswordBox.Texts, ID_Box.Texts);
                 MessageBoxClass.UserSuccessfullyRegisters(UserNameBox.Texts);
 
-                // Close the current form and show the login form
                 this.Hide();
                 LoginFrom from = new LoginFrom();
                 from.ShowDialog();
@@ -168,4 +183,10 @@ namespace TestF.Forms.MineForms
             }
         }
     }
+
+
+
+
+
+
 }

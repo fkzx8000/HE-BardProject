@@ -12,12 +12,40 @@ namespace TestF.forms
 {
     public partial class InfoBirdFrom : Form
     {
-        // Reference to the grandparent form (MianFrom), parent form (BirdSearchFrom), and BirdData object
+
+
+
+        //TODO:עמוס!!!!  מידע על ציפור ספציפית
+        //  ניתן לערוך ולשמור כל פרט
+
+        /*
+
+        // 1.  אם זה מספר סידורי על המספר לא לחזור על עצמו אצל אפ ציפור אחרת, ולתעדכן אצל ההורים והילדים
+        
+        // 2. אם מדובר בזן אזיש חובה לשנות תת זן לפני שהשינוי ישמר
+        
+        // 3. אם זה מספר סידורי של אב או אם אז זה ציפורים מבוגרות יותר וקיימיות
+        
+        // 4.  בהוספת גוזל חייבים לבדוק שהציפור הנוספת קיימת ומהמין השונה****
+
+
+        /*
+         *  ----- הוראות ישר מעבודה----
+         *מסך שמציג את פרטי הציפור,
+         *בנוסף לפרטים יהיה כפתור שמאפשר להוסיף גוזלים לציפור 
+         *.(יש צורך לבקש את המספר של ההורה השני)
+         ***כל גוזל מקבל את כל הפרטים כמו בהוספת ציפור חדשה כאשר הפרטים הידועים צרכים להתווסף ***באופן אוטומטי
+         *למשל, הגוזל נמצא באותו הכלוב כמו ההורה שלו, זן הציפור והתת זן הם כמו של ההורה וכו
+         * 
+         */
+
+
+        //----- ירושמה מחלונות קודמים----
+        //----- לצורך נראות פתחת חלונית הוספת ציפור (גוזל)--
         private MianFrom grandfather;
         private BirdSearchFrom fatherFrom;
         private BirdData MyBird;
-
-        // Constructor to initialize the form and set references to the grandparent, parent, and BirdData object
+        //Ctor
         public InfoBirdFrom(MianFrom a, BirdSearchFrom f, BirdData bird)
         {
             InitializeComponent();
@@ -26,10 +54,10 @@ namespace TestF.forms
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             grandfather = a;
             fatherFrom = f;
-            MyBird = bird;
+            MyBird=bird;
+
         }
 
-        // Utility method to get a random string from two input strings
         private static string GetRandomString(string str1, string str2)
         {
             var rand = new Random(DateTime.Now.Millisecond);
@@ -38,24 +66,22 @@ namespace TestF.forms
             return str2;
         }
 
-        // Event handler for the Add_Btu (Add button) click event
+
+        // כפתור הוסף גוזל
         private void Add_Btu_Click(object sender, EventArgs e)
         {
             try
             {
                 var rand = new Random(DateTime.Now.Millisecond);
 
-                // Retrieve the second parent bird based on the provided serial number
                 var secondParent = FileControl.GetBird().Where(b => b.Serial == serial_number_other.Texts).ToList();
-
-                // Generate a random serial number for the new bird
+                var time = DateTime.Now.ToString("dd/MM/yyyy");
                 string serial = rand.Next(1000, 10000).ToString();
                 while (FileControl.GetBird().Any(b => b.Serial == serial))
                 {
                     serial = rand.Next(1000, 10000).ToString();
                 }
 
-                // Add the new bird to the file based on the parent's and current bird's data
                 if (MyBird.Sex == "זכר")
                 {
                     FileControl.AddBird(
@@ -64,7 +90,7 @@ namespace TestF.forms
                         GetRandomString(secondParent[0].SubSpeciesBird, MyBird.SubSpeciesBird),
                         GetRandomString(secondParent[0].Sex, MyBird.Sex),
                         MyBird.Serial, secondParent[0].Serial,
-                        GetRandomString(secondParent[0].CageNumber, MyBird.CageNumber), DateTime.Now.ToString("dd/MM/yyyy"));
+                        GetRandomString(secondParent[0].CageNumber, MyBird.CageNumber), time);
                 }
                 else
                 {
@@ -74,7 +100,7 @@ namespace TestF.forms
                           GetRandomString(secondParent[0].SubSpeciesBird, MyBird.SubSpeciesBird),
                           GetRandomString(secondParent[0].Sex, MyBird.Sex),
                           secondParent[0].Serial, MyBird.Serial,
-                          GetRandomString(secondParent[0].CageNumber, MyBird.CageNumber), DateTime.Now.ToString("dd/MM/yyyy"));
+                          GetRandomString(secondParent[0].CageNumber, MyBird.CageNumber), time);
                 }
 
                 MessageBoxClass.BirdSuccessfullyAdded(serial);
@@ -86,7 +112,8 @@ namespace TestF.forms
             }
         }
 
-        // Event handlers for various text boxes and combo boxes to handle placeholder text and dynamic behavior
+        //ניקוי תבות לצוריכי נראות
+
 
         private void dynamic_cage_number_Click(object sender, EventArgs e)
         {
@@ -100,17 +127,119 @@ namespace TestF.forms
                 dynamic_cage_number.Texts = "מספר הכלוב";
         }
 
-        // Similar event handlers for other text boxes and combo boxes...
 
-        // Event handler for the Save_Btu (Save button) click event
+        private void serial_number_other_Click(object sender, EventArgs e)
+        {
+            if (serial_number_other.Texts == "מספר סידורי של ההורה האחר")
+                serial_number_other.Texts = String.Empty;
+        }
+
+        private void serial_number_other_Leave(object sender, EventArgs e)
+        {
+            if (serial_number_other.Texts == "")
+                serial_number_other.Texts = "מספר סידורי של ההורה האחר";
+        }
+
+        private void subspecies_dynamic_Click(object sender, EventArgs e)
+        {
+            if (subspeciess_dynamic.Texts == "תת זן")
+                subspeciess_dynamic.Texts = String.Empty;
+        }
+
+        private void subspecies_dynamic_Leave(object sender, EventArgs e)
+        {
+            if (subspeciess_dynamic.Texts == "")
+                subspeciess_dynamic.Texts = "תת זן";
+        }
+        //מסווג לפי מינים
+        private void species_bird_dynamic_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            subspeciess_dynamic.Texts = "             תת זן";
+            subspeciess_dynamic.Items.Clear();
+
+            if (species_bird_dynamicc.Texts == "גולדיאן אוסטרלי")
+                subspeciess_dynamic.Items.AddRange(new object[] { "מרכז אוסטרליה", "ערי חוף" });
+
+            if (species_bird_dynamicc.Texts == "גולדיאן אירופאי")
+                subspeciess_dynamic.Items.AddRange(new object[] { "מזרח אירופה", "מערב אירופה" });
+
+            if (species_bird_dynamicc.Texts == "גולדיאן אמריקאי")
+                subspeciess_dynamic.Items.AddRange(new object[] { "צפון אמריקה", "מרכז אמריקה", "דרום אמריקה" });
+
+        }
+
+        //-------------system Do not touch --------------
+
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+        private void exitBTN_Click(object sender, EventArgs e)
+        {
+            //Ityan.Close();
+            this.Close();
+
+        }
+        private void panelTitleBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void OnlyNum(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                MessageBoxClass.writing_lettersError();
+                e.Handled = true;
+            }
+        }
+
+        private void dynamic_cage_number_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsLetterOrDigit(e.KeyChar))
+                e.Handled = true;
+            
+        }
+
+        private void InfoBirdFrom_Load(object sender, EventArgs e)
+        {
+            S_num.Text= MyBird.Serial;
+            species_bird_dynamicc.Texts= MyBird.SpeciesBird;
+            subspeciess_dynamic.Texts = MyBird.SubSpeciesBird;
+            dynamic_date.Text = MyBird.ExpirationDate;
+            dynamic_sex_bird.Texts= MyBird.Sex;
+            dynamic_cage_number.Texts = MyBird.CageNumber;
+            dynamic_F_serial_number.Text = MyBird.F_Serial;
+            dynamic_M_serial_number.Text=MyBird.M_Serial;
+
+            try
+            {
+                string sex = "";
+                if (MyBird.Sex == "זכר")
+                    sex = "נקבה";
+                else
+                    sex = "זכר";
+
+                var birdList = FileControl.GetBird().Where(birds => birds.Sex == sex).ToList();
+                foreach (BirdData b in birdList)
+                {
+                    serial_number_other.Items.Add(b.Serial);
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                MessageBox.Show("No gender found");
+            }
+
+        }
+
         private void Save_Btu_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate the cage serial number
                 ArgumentTest.TestCageSerial(dynamic_cage_number.Texts);
-
-                // Update the bird's record with the new data
                 FileControl.EditBirdRecord(S_num.Text, species_bird_dynamicc.Texts, subspeciess_dynamic.Texts, dynamic_sex_bird.Texts, dynamic_F_serial_number.Text, dynamic_M_serial_number.Text, dynamic_cage_number.Texts, dynamic_date.Text);
                 MessageBoxClass.BirdSuccessfullyAdded(S_num.Text);
 
@@ -125,9 +254,9 @@ namespace TestF.forms
                 MessageBoxClass.CageSerialError();
                 dynamic_cage_number.Texts = String.Empty;
             }
+            
         }
-
-        // Other event handlers for form loading, button clicks, mouse events, etc.
+        //-------------system Do not touch --------------
 
     }
 }

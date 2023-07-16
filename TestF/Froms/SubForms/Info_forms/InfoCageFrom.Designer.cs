@@ -252,7 +252,9 @@
             this.height_box.TabIndex = 68;
             this.height_box.Texts = "גובה";
             this.height_box.UnderlinedStyle = true;
+            this.height_box.Click += new System.EventHandler(this.height_box_Click);
             this.height_box.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnlyNum);
+            this.height_box.Leave += new System.EventHandler(this.height_box_Leave);
             // 
             // width_box
             // 
@@ -273,7 +275,9 @@
             this.width_box.TabIndex = 67;
             this.width_box.Texts = "רוחב";
             this.width_box.UnderlinedStyle = true;
+            this.width_box.Click += new System.EventHandler(this.width_box_Click);
             this.width_box.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnlyNum);
+            this.width_box.Leave += new System.EventHandler(this.width_box_Leave);
             // 
             // Length_box
             // 

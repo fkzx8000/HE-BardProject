@@ -13,53 +13,60 @@ using TestF.Forms.SubForms.Info_forms;
 namespace TestF.forms
 {
     public partial class CageSearchFrom : Form
+
     {
+        //TODO: זה דף החיפוש כלוב
+
+        /* ********** אפשרות חיפוש כלוב לפי מספר סידורי / חומר כל מצב בנפרד ***********
+         * 
+         * 1. במקרה של תוצאה אחת – להציג את הכלוב
+         * 
+         * 2. במקרה של מספר תוצאות – להציג רשימה ממוינת לפי מספר כלוב
+         *      2.1 (במסך הצגת הכלוב יופיעו פרטי הכלוב ורשימה של הציפורים שנמצאים בו (לפי מספר סידורי
+         * 
+         * 3. במקרה של לחיצה על כלוב ספציפי בטבלה נעבור לדף הספציפי שלו
+         */
+
         private MianFrom fatherFrom;
 
-        // Constructor
+        //ctor
         public CageSearchFrom(MianFrom main)
         {
             InitializeComponent();
             fatherFrom = main;
         }
 
-        // Event handler for the "Search" button click event
+        //----------------כפתורי חיפוש----------------------------
         private void Search_Click(object sender, EventArgs e)
         {
             if (cageNumber.Texts == "מספר כלוב" && sexBirdBox.Texts == "             חומר הכלוב")
             {
-                // If no search criteria is specified, open the cage dataset form
                 CageDataSetFrom from = new CageDataSetFrom(fatherFrom, this);
                 from.ShowDialog();
             }
             else
             {
-                // If search criteria is specified, open the cage dataset form with the specified criteria
                 CageDataSetFrom from = new CageDataSetFrom(fatherFrom, this, cageNumber.Texts, sexBirdBox.Texts);
                 from.ShowDialog();
             }
         }
+        //---------- כפתור זמני למעבר למקרה ספציפי של מציאת ציפור ספציפית ------------
 
-        // Event handler for the "cageNumber" click event
+        //----- ניקוי תבות-----
         private void cageNumber_Click(object sender, EventArgs e)
         {
-            // Clear the text if it is set to "מספר כלוב"
             if (cageNumber.Texts == "מספר כלוב")
                 cageNumber.Texts = String.Empty;
         }
 
-        // Event handler for the "cageNumber" leave event
         private void cageNumber_Leave(object sender, EventArgs e)
         {
-            // Restore the default text if the field is empty
             if (cageNumber.Texts == "")
                 cageNumber.Texts = "מספר כלוב";
         }
 
-        // Event handler for the "cageNumber" key press event
         private void cageNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Allow only letters and digits, block other characters
             if (!char.IsControl(e.KeyChar) && !char.IsLetterOrDigit(e.KeyChar))
                 e.Handled = true;
         }

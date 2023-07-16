@@ -83,6 +83,7 @@
             this.exitBTN.TabIndex = 6;
             this.exitBTN.Text = "O";
             this.exitBTN.UseVisualStyleBackColor = true;
+            this.exitBTN.Click += new System.EventHandler(this.exitBTN_Click);
             // 
             // panel1
             // 
@@ -116,6 +117,7 @@
             this.panelTitleBar.Name = "panelTitleBar";
             this.panelTitleBar.Size = new System.Drawing.Size(804, 80);
             this.panelTitleBar.TabIndex = 7;
+            this.panelTitleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTitleBar_MouseDown);
             // 
             // Static_serial_number
             // 
@@ -323,6 +325,7 @@
             this.species_bird_dynamicc.Size = new System.Drawing.Size(206, 30);
             this.species_bird_dynamicc.TabIndex = 31;
             this.species_bird_dynamicc.Texts = "             זן הציפור";
+            this.species_bird_dynamicc.OnSelectedIndexChanged += new System.EventHandler(this.species_bird_dynamic_OnSelectedIndexChanged);
             // 
             // dynamic_cage_number
             // 
@@ -344,6 +347,7 @@
             this.dynamic_cage_number.Texts = "מספר הכלוב";
             this.dynamic_cage_number.UnderlinedStyle = true;
             this.dynamic_cage_number.Click += new System.EventHandler(this.dynamic_cage_number_Click);
+            this.dynamic_cage_number.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dynamic_cage_number_KeyPress);
             this.dynamic_cage_number.Leave += new System.EventHandler(this.dynamic_cage_number_Leave);
             // 
             // dynamic_sex_bird
@@ -442,6 +446,7 @@
             this.MinimumSize = new System.Drawing.Size(820, 490);
             this.Name = "InfoBirdFrom";
             this.Text = "מידע על ציפורים";
+            this.Load += new System.EventHandler(this.InfoBirdFrom_Load);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panelTitleBar.ResumeLayout(false);

@@ -18,13 +18,23 @@ namespace TestF.Forms.SubForms.Info_forms
 {
     public partial class InfoCageFrom : Form
     {
-        // Reference to the grandparent form (MianFrom), parent form (CageSearchFrom), and CageData object
+
+        //TODO: זה דף מידע על כלוב
+        /* 1. בטבלה שהדף כולל על הטבלה להכיל את כל הציפורים שהם בתוך הכלוב הזה
+         * 
+         * 2. יש אפשרות לערוך את הפרטים של כלובים 
+         * 
+         * 3. !!! כאשר משנים מספר סידורי של כלוב על כל הציפורים שבכלוב גם לשתנות!!!!
+         * 
+         * 4.הצגת הכלוב יופיעו פרטי הכלוב ורשימה של הציפורים שנמצאים בו לפי מספר סידורי
+         * 
+         */
         private MianFrom grandfather;
         private CageSearchFrom fatherFrom;
         private CageData Cage;
 
-        // Constructor to initialize the form and set references to the grandparent, parent, and CageData object
-        public InfoCageFrom(MianFrom main, CageSearchFrom searchForm, CageData data)
+        //ctor
+        public InfoCageFrom(MianFrom main, CageSearchFrom searchForm,CageData data)
         {
             InitializeComponent();
             grandfather = main;
@@ -32,10 +42,11 @@ namespace TestF.Forms.SubForms.Info_forms
             this.Text = string.Empty;
             this.ControlBox = false;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-            Cage = data;
+            Cage = data; 
         }
 
-        // Event handlers for text boxes to handle placeholder text behavior
+        //ניקוי תבות לצוריכי נראות
+
 
         private void Length_box_Click(object sender, EventArgs e)
         {
@@ -49,25 +60,44 @@ namespace TestF.Forms.SubForms.Info_forms
                 Length_box.Texts = "אורך";
         }
 
-        // Similar event handlers for other text boxes...
+        private void width_box_Click(object sender, EventArgs e)
+        {
+            if (width_box.Texts == "רוחב")
+                width_box.Texts = String.Empty;
+        }
 
-        // External function imports for capturing mouse events and moving the form
+        private void width_box_Leave(object sender, EventArgs e)
+        {
+            if (width_box.Texts == "")
+                width_box.Texts = "רוחב";
+        }
 
+        private void height_box_Click(object sender, EventArgs e)
+        {
+            if (height_box.Texts == "גובה")
+                height_box.Texts = String.Empty;
+        }
+
+        private void height_box_Leave(object sender, EventArgs e)
+        {
+            if (height_box.Texts == "")
+                height_box.Texts = "גובה";
+        }
+
+
+        //-------------system Do not touch --------------
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
-
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
 
-        // Event handler for mouse down event on the panelTitleBar to enable moving the form
 
         private void panelTitleBar_MouseDown(object sender, MouseEventArgs e)
         {
+
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
-
-        // Event handlers for button clicks and form loading
 
         private void exitBTN_Click(object sender, EventArgs e)
         {
@@ -76,14 +106,12 @@ namespace TestF.Forms.SubForms.Info_forms
 
         private void cageNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Allow only letters and digits for the cage number
             if (!char.IsControl(e.KeyChar) && !char.IsLetterOrDigit(e.KeyChar))
                 e.Handled = true;
         }
 
         private void OnlyNum(object sender, KeyPressEventArgs e)
         {
-            // Allow only digits for certain input fields, display an error message for letters
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 MessageBoxClass.writing_lettersError();
@@ -91,14 +119,10 @@ namespace TestF.Forms.SubForms.Info_forms
             }
         }
 
-        // Event handler for form loading
-
         private void InfoCageFrom_Load(object sender, EventArgs e)
         {
-            // Retrieve a list of birds associated with the cage
             var birdList = FileControl.GetBird().Where(bird => bird.CageNumber == Cage.CageNumber).ToList();
 
-            // Sort the bird list and populate the DataGridView with bird data
             birdList.Sort();
             foreach (var bird in birdList)
             {
@@ -111,10 +135,8 @@ namespace TestF.Forms.SubForms.Info_forms
                     bird.CageNumber,
                     bird.F_Serial,
                     bird.M_Serial
-                );
+                    );
             }
-
-            // Display the cage number and other details in the corresponding text boxes
             S_num.Text = Cage.CageNumber;
             sexBirdBox.Texts = Cage.Material;
             Length_box.Texts = Cage.Length;
@@ -122,16 +144,12 @@ namespace TestF.Forms.SubForms.Info_forms
             width_box.Texts = Cage.With;
         }
 
-        // Event handler for the Save button click event
-
         private void Save_BTU_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate the cage dimensions
                 ArgumentTest.TestCageDimensions(width_box.Texts, Length_box.Texts, height_box.Texts);
 
-                // Update the cage record with the new dimensions and material
                 FileControl.EditCageRecord(S_num.Text, width_box.Texts, Length_box.Texts, height_box.Texts, sexBirdBox.Texts);
 
                 MessageBoxClass.CageSuccessfullyAdded(S_num.Text);
@@ -142,5 +160,9 @@ namespace TestF.Forms.SubForms.Info_forms
                 MessageBoxClass.CageDimensionsError();
             }
         }
+
+
+        //-------------system Do not touch --------------
+
     }
 }

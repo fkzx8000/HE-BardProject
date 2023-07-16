@@ -12,11 +12,36 @@ namespace TestF.forms
     public partial class AddBirdFrom : Form
     {
 
+        //TODO: זה תת מסך להוספת ציפור
+        /*
+         * 1. המספר הסידורי חייב להיות רק מספרים בלבד
+         * 
+         * 2. זן הציפור – אותיות. בונוס מצורף לעבודה
+         * 
+         * 3. תת זן – אותיות
+         * 
+         * 4. תאריך בקיעה
+         * 
+         * 5. מין הציפור
+         * 
+         * 6. מספר כלוב – אותיות וספרות
+         * 
+         * 7. מספר סידורי אב -ספרות בלבד
+         * 
+         * 8. מספר סידורי אם - ספרות בלבד
+         * 
+         * 9. הציפור מתווספת לקובץ
+         * 
+         */
+
+
+        //ctor
         public AddBirdFrom()
         {
             InitializeComponent();
         }
 
+        //----- ניקוי תבות-----
         private void cageNumber_Click(object sender, EventArgs e)
         {
             if (cageNumber.Texts == "מספר כלוב")
@@ -69,6 +94,7 @@ namespace TestF.forms
             if (SerialBox.Texts == "")
                 SerialBox.Texts = "מספר סידורי";  
         }
+        //--------- תלות תת זן בזן---------------
         private void zan_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             ttzan.Texts = "             תת זן";
@@ -81,29 +107,20 @@ namespace TestF.forms
 
             if (zan.Texts == "גולדיאן אמריקאי")
                 ttzan.Items.AddRange(new object[] { "צפון אמריקה", "מרכז אמריקה", "דרום אמריקה" });
-            else
-                ttzan.Items.AddRange(new object[] { "             תת זן" });
-
-
         }
 
         private void Search_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate input values
                 ArgumentTest.TestBirdId(SerialBox.Texts);
                 ArgumentTest.TestBirdId(FSerialNumber.Texts);
                 ArgumentTest.TestBirdId(MSerialNumber.Texts);
                 ArgumentTest.TestCageSerial(cageNumber.Texts);
-
-                // Add bird to the file using the input values
                 FileControl.AddBird(SerialBox.Texts, zan.Texts, ttzan.Texts, sexBirdBox.Texts, FSerialNumber.Texts, MSerialNumber.Texts, cageNumber.Texts, DateBirthBox.Value.ToString("dd/MM/yyyy"));
 
-                // Show success message box with the added bird's serial number
                 MessageBoxClass.BirdSuccessfullyAdded(SerialBox.Texts);
 
-                // Reset input fields to their default values
                 cageNumber.Texts = "מספר כלוב";
                 FSerialNumber.Texts = "מספר סידורי אב";
                 MSerialNumber.Texts = "מספר סידורי אם";
@@ -114,33 +131,28 @@ namespace TestF.forms
             }
             catch (CageMissingException)
             {
-                // Show error message box for missing cage serial number
                 MessageBoxClass.CageSerialMissingError();
             }
             catch (IDTakenException)
             {
-                // Show error message box for duplicate bird ID
                 MessageBoxClass.IDExistsError(SerialBox.Texts);
             }
             catch (SerialException)
             {
-                // Show error message box for invalid cage serial number
                 MessageBoxClass.CageSerialError();
                 cageNumber.Texts = String.Empty;
             }
             catch (IDException ex)
             {
-                // Show error message box for missing bird ID
                 MessageBoxClass.BirdSerialMissingError(ex.Message);
             }
             catch (BirdIDException ex)
             {
-                // Show error message box for invalid bird ID
                 MessageBoxClass.BirdSerialError(ex.Message);
             }
+
         }
 
-        //---Checking the correctness of the keys
         private void NumOnly(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -156,162 +168,123 @@ namespace TestF.forms
                 e.Handled = true;
         }
 
+        private void FSerialNumber__TextChanged(object sender, EventArgs e)
+        {
 
+        }
 
+        private void MSerialNumber__TextChanged(object sender, EventArgs e)
+        {
+
+        }
 
         private static string GetRandomSpecies()
         {
-            // Create a new random number generator based on the current time in milliseconds
             var rand = new Random(DateTime.Now.Millisecond);
-
-            // Generate a random number between 0 and 2
             var number = rand.Next(0, 2);
-
-            // Check the generated number and return the corresponding species
             if (number == 0)
                 return "גולדיאן אמריקאי";
             else if (number == 1)
+            {
                 return "גולדיאן אירופאי";
-
-            // If the generated number is not 0 or 1, return "גולדיאן אוסטרלי" as the default species
+            }
             return "גולדיאן אוסטרלי";
         }
 
         private static string GetRandomSubSpecies(string specises)
         {
-            // Create a new random number generator based on the current time in milliseconds
             var rand = new Random(DateTime.Now.Millisecond);
-
-            // Check the provided species and generate a random subspecies accordingly
             if (specises == "גולדיאן אוסטרלי")
             {
-                // Generate a random number between 0 and 1
                 if (rand.Next(0, 1) == 0)
                     return "מרכז אוסטרליה";
-
-                // If the generated number is not 0, return "ערי חוף" as the default subspecies
                 return "ערי חוף";
             }
 
             if (specises == "גולדיאן אירופאי")
             {
-                // Generate a random number between 0 and 1
                 if (rand.Next(0, 1) == 0)
                     return "מזרח אירופה";
-
-                // If the generated number is not 0, return "מערב אירופה" as the default subspecies
                 return "מערב אירופה";
             }
-
             if (specises == "גולדיאן אמריקאי")
             {
-                // Generate a random number between 0 and 2
                 var r = rand.Next(0, 2);
-
-                // Check the generated number and return the corresponding subspecies
                 if (r == 0)
                     return "צפון אמריקה";
                 else if (r == 1)
                     return "מרכז אמריקה";
-            }
 
-            // If none of the specified species matched, return "דרום אמריקה" as the default subspecies
+            }
             return "דרום אמריקה";
         }
 
-
         private void AddBirdFrom_Load(object sender, EventArgs e)
         {
-            // Get a list of male birds from the file using FileControl.GetBird() method
-            // and filter the list to contain only birds with sex "זכר"
             var birdListMale = FileControl.GetBird().Where(birds => birds.Sex == "זכר").ToList();
 
-            // Check if there are no male birds in the list
             if (birdListMale.Count == 0)
             {
-                // Create a new random number generator based on the current time in milliseconds
                 var rand = new Random(DateTime.Now.Millisecond);
 
-                // Generate a random species and subspecies for the new bird
-                var species = GetRandomSpecies();
-                var subSpecies = GetRandomSubSpecies(species);
-
-                // Get the first cage from the cage list using FileControl.GetCageList()[0]
+                var spiecise = GetRandomSpecies();
+                var subSpiecise = GetRandomSubSpecies(spiecise);
                 var randomCage = FileControl.GetCageList()[0];
 
-                // Get the current date and time as a string in the format "dd/MM/yyyy"
                 var time = DateTime.Now.ToString("dd/MM/yyyy");
-
-                // Generate a random serial number for the new bird
                 string serial = rand.Next(1000, 10000).ToString();
-
-                // Check if the generated serial number is already used by any existing bird
                 while (FileControl.GetBird().Any(b => b.Serial == serial))
                 {
-                    // If the serial number is already used, generate a new one
                     serial = rand.Next(1000, 10000).ToString();
                 }
 
-                // Add the new bird to the file using FileControl.AddBird() method
-                FileControl.AddBird(serial, species, subSpecies, "זכר", "0", "1", randomCage.CageNumber, time);
-            }
 
-            // Iterate over the male bird list and add their serial numbers to the MSerialNumber.Items collection
+                FileControl.AddBird(serial, spiecise, subSpiecise, "זכר", "0", "1", randomCage.CageNumber, time);
+            }
             foreach (BirdData b in birdListMale)
             {
                 MSerialNumber.Items.Add(b.Serial);
             }
 
-            // Get a list of female birds from the file using FileControl.GetBird() method
-            // and filter the list to contain only birds with sex "נקבה"
-            var birdListFemale = FileControl.GetBird().Where(birds => birds.Sex == "נקבה").ToList();
-
-            // Check if there are no female birds in the list
-            if (birdListFemale.Count == 0)
+            var birdListFemail = FileControl.GetBird().Where(birds => birds.Sex == "נקבה").ToList();
+            if (birdListMale.Count == 0)
             {
-                // Create a new random number generator based on the current time in milliseconds
                 var rand = new Random(DateTime.Now.Millisecond);
 
-                // Generate a random species and subspecies for the new bird
-                var species = GetRandomSpecies();
-                var subSpecies = GetRandomSubSpecies(species);
-
-                // Get the first cage from the cage list using FileControl.GetCageList()[0]
+                var spiecise = GetRandomSpecies();
+                var subSpiecise = GetRandomSubSpecies(spiecise);
                 var randomCage = FileControl.GetCageList()[0];
 
-                // Get the current date and time as a string in the format "dd/MM/yyyy"
                 var time = DateTime.Now.ToString("dd/MM/yyyy");
-
-                // Generate a random serial number for the new bird
                 string serial = rand.Next(1000, 10000).ToString();
-
-                // Check if the generated serial number is already used by any existing bird
                 while (FileControl.GetBird().Any(b => b.Serial == serial))
                 {
-                    // If the serial number is already used, generate a new one
                     serial = rand.Next(1000, 10000).ToString();
                 }
 
-                // Add the new bird to the file using FileControl.AddBird() method
-                FileControl.AddBird(serial, species, subSpecies, "נקבה", "2", "3", randomCage.CageNumber, time);
-            }
 
-            // Iterate over the female bird list and add their serial numbers to the FSerialNumber.Items collection
-            foreach (BirdData b in birdListFemale)
+                FileControl.AddBird(serial, spiecise, subSpiecise, "נקבה", "2", "3", randomCage.CageNumber, time);
+            }
+            foreach (BirdData b in birdListFemail)
             {
                 FSerialNumber.Items.Add(b.Serial);
             }
 
-            // Get a list of all cages from the file using FileControl.GetCageList() method
             var cages = FileControl.GetCageList().ToList();
-
-            // Iterate over the cage list and add the cage numbers to the cageNumber.Items collection
             foreach (CageData cage in cages)
             {
                 cageNumber.Items.Add(cage.CageNumber);
             }
         }
 
+        private void uiComboBox1_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
 
+        }
+
+        private void uiComboBox1_OnSelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -68,6 +68,7 @@
             this.FSerialNumber.Size = new System.Drawing.Size(200, 30);
             this.FSerialNumber.TabIndex = 23;
             this.FSerialNumber.Texts = "מספר סידורי אם";
+            this.FSerialNumber.OnSelectedIndexChanged += new System.EventHandler(this.uiComboBox1_OnSelectedIndexChanged_1);
             // 
             // MSerialNumber
             // 
@@ -88,6 +89,7 @@
             this.MSerialNumber.Size = new System.Drawing.Size(200, 30);
             this.MSerialNumber.TabIndex = 22;
             this.MSerialNumber.Texts = "מספר סידורי אב";
+            this.MSerialNumber.OnSelectedIndexChanged += new System.EventHandler(this.uiComboBox1_OnSelectedIndexChanged);
             // 
             // ttzan
             // 

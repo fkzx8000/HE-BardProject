@@ -14,17 +14,17 @@ namespace TestF
 {
     public partial class MianFrom : Form
     {
-        // Fields
+        // TODO: העמוד הראשי עם כל הפניות תכלס אין מה לגעת
+
+
+        //Fields
         private Button currentButton;
         private Random random;
         private Form activeForm;
-
-        // Constructor
+        //ctor
         public MianFrom()
         {
             InitializeComponent();
-
-            // Initialize fields
             random = new Random();
             btnClose.Visible = false;
             smallLogo.Visible = false;
@@ -32,14 +32,17 @@ namespace TestF
             this.ControlBox = false;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
         }
-
-        // Import external functions from user32 DLL for capturing mouse movement and sending messages
+        //-------  ------- system 32 -------  -------
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
 
-        // Method to activate the selected button
+
+
+        //----------------------------- פונקציות פנימיות------------------------
+
+        //  הפונקציה שמראה איזה כפתור פעיל עכשיו אם יש כפתור פעיל בכלל.
         private void ActivateButton(object btnSender)
         {
             if (btnSender != null)
@@ -60,7 +63,8 @@ namespace TestF
             }
         }
 
-        // Method to open a new form within the containing panel
+
+        // פותח חלונית משנה למסך הראשי
         private void OpenContainingForm(Form ONForm, object btnSender)
         {
             if (activeForm != null)
@@ -69,7 +73,7 @@ namespace TestF
             OpenAdd(ONForm);
         }
 
-        // Method to disable the previously activated button
+        // משבית את הכפתור הפעיל
         private void DisableButton()
         {
             foreach (Control previousBtn in panelMenu.Controls)
@@ -77,21 +81,15 @@ namespace TestF
                 if (previousBtn.GetType() == typeof(Button))
                 {
                     previousBtn.BackColor = Color.FromArgb(51, 51, 76);
-                    previousBtn.ForeColor = Color.Gainsboro;
+                    previousBtn.ForeColor = Color.Gainsboro; 
                     previousBtn.Font = new System.Drawing.Font("Arial Rounded", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 }
             }
         }
 
-        // Event handler for the btnClose (close button) click event
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            if (activeForm != null)
-                activeForm.Close();
-            Reset();
-        }
+        // פוקצית כפתור האקס
+        private void btnClose_Click(object sender, EventArgs e) { if (activeForm != null) activeForm.Close(); Reset(); }
 
-        // Method to reset the form's state
         private void Reset()
         {
             DisableButton();
@@ -103,9 +101,10 @@ namespace TestF
             smallLogo.Visible = false;
         }
 
-        // Method to open a form within the containing panel
-        public void OpenAdd(Form BridAdd)
-        {
+
+        // --------------פונקציות חיצוניות--------------
+
+        public void OpenAdd(Form BridAdd) {
             activeForm = BridAdd;
             BridAdd.TopLevel = false;
             BridAdd.FormBorderStyle = FormBorderStyle.None;
@@ -115,71 +114,46 @@ namespace TestF
             BridAdd.BringToFront();
             BridAdd.Show();
             siteLOGO.Text = BridAdd.Text;
+            //ActivateButton(this.BTNaddBird);
         }
+        
+        public void ActivaAddBird() { ActivateButton(this.BTNaddBird); }
 
-        // Method to activate the "Add Bird" button
-        public void ActivaAddBird()
-        {
-            ActivateButton(this.BTNaddBird);
-        }
+        //************--- כפתורי מעבר ---*********
 
-        // Event handler for the BTNaddBird (Add Bird button) click event
         private void BTNaddBird_Click(object sender, EventArgs e)
-        {
-            OpenContainingForm(new forms.AddBirdFrom(), sender);
-        }
+        {OpenContainingForm(new forms.AddBirdFrom(), sender);}
 
-        // Event handler for the BirdSearchBTU (Bird Search button) click event
         private void BirdSearchBTU_Click(object sender, EventArgs e)
-        {
-            OpenContainingForm(new forms.BirdSearchFrom(this), sender);
-        }
+        {OpenContainingForm(new forms.BirdSearchFrom(this), sender);}
 
-        // Event handler for the BTNaddCage (Add Cage button) click event
         private void BTNaddCage_Click(object sender, EventArgs e)
-        {
-            OpenContainingForm(new forms.AddCageFrom(), sender);
-        }
+        {OpenContainingForm(new forms.AddCageFrom(), sender);}
 
-        // Event handler for the cageSearchBTU (Cage Search button) click event
         private void cageSearchBTU_Click(object sender, EventArgs e)
-        {
-            OpenContainingForm(new forms.CageSearchFrom(this), sender);
-        }
+        {OpenContainingForm(new forms.CageSearchFrom(this), sender);}
 
-        // Event handler for the panelTitleBar (title bar panel) mouse down event
+
+        //************--- panel system ---*********
+
         private void panelTitleBar_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        // Event handler for the panelLogo (logo panel) mouse down event
         private void panelLogo_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        // Event handler for the exitBTN (exit button) click event
-        private void exitBTN_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+        // שלושת כפתורי השליטה,סגור,הגדל,מזער
+        private void exitBTN_Click(object sender, EventArgs e) { Application.Exit(); }
 
-        // Event handler for the BTNmaxsize (maximize button) click event
-        private void BTNmaxsize_Click(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Normal)
-                this.WindowState = FormWindowState.Maximized;
-            else
-                this.WindowState = FormWindowState.Normal;
-        }
+        private void BTNmaxsize_Click(object sender, EventArgs e) { if (WindowState == FormWindowState.Normal) this.WindowState = FormWindowState.Maximized; else this.WindowState = FormWindowState.Normal; }
 
-        // Event handler for the BTNminisize (minimize button) click event
-        private void BTNminisize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
+        private void BTNminisize_Click(object sender, EventArgs e) { this.WindowState = FormWindowState.Minimized; }
+
     }
 }
