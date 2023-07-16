@@ -19,8 +19,8 @@ Login to the user in full Hebrew!
 ![Image](https://user-images.githubusercontent.com/117019431/253829545-4271a2b0-41aa-43f3-9591-38f3f5855570.jpg)
 
 
-Database search system {\displaystyle \ f=\Theta (1)}, convenient add interface {\displaystyle \ f=\Theta (1)},
-UI\UX from the literature.
+Database search system Theta (1), convenient add interface Theta (1)},
+UI\UX from the literature. ![Image](https://wikimedia.org/api/rest_v1/media/math/render/svg/0be8183f731b175f59389222d1968154604adeb0)
 
 
 ![Image](https://user-images.githubusercontent.com/117019431/253829710-58b6766a-e346-4276-8280-a5c0eb91e516.jpg)
